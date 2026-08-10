@@ -1,0 +1,52 @@
+# ---------- 敏感信息：绝不上传 ----------
+# 后端环境变量（含真实 API Key）
+backend/.env
+.env
+*.env
+!*.env.example
+!**/.env.example
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- Node / 前端 ----------
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# ---------- 数据（运行时生成 / 用户上传） ----------
+# SQLite 数据库文件
+data/*.db
+backend/data/*.db
+# 用户上传的媒体文件（照片/视频）
+data/media/
+backend/data/media/
+# 构建产物
+frontend/dist/
+
+# ---------- 系统文件 ----------
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+
+# ---------- Claude Code 本地设置（含本机权限，不上传） ----------
+.claude/settings.local.json
+
+# ---------- 编辑器 / IDE ----------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

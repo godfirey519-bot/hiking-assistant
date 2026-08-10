@@ -1,0 +1,33 @@
+{
+  "name": "徒步助手 — AI 徒步规划",
+  "short_name": "徒步助手",
+  "description": "多 AI Agent 协作的智能徒步规划助手 — 路线分析、装备推荐、安全评估、天气查询",
+  "id": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#16a34a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "48x46",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["travel", "health", "utilities"],
+  "lang": "zh-CN",
+  "dir": "ltr"
+}
