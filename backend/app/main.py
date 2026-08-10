@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 
 from app.config import get_settings, MEDIA_DIR
 from app.database import init_db
-from app.api import auth, routes, equipment, plans, trips, agents, chat
+from app.api import auth, routes, equipment, plans, trips, agents, chat, stats
 
 settings = get_settings()
 
@@ -42,6 +42,7 @@ app.include_router(plans.router, prefix="/api")
 app.include_router(trips.router, prefix="/api")
 app.include_router(agents.router, prefix="/api")
 app.include_router(chat.router, prefix="/api")
+app.include_router(stats.router, prefix="/api")
 
 # 媒体文件静态服务 (徒步记录照片/视频，存于 data/media)
 MEDIA_DIR.mkdir(parents=True, exist_ok=True)
