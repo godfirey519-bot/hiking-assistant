@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Upload, Map, Mountain, Clock, ArrowUp, Search, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
+import { Upload, Map, Mountain, Clock, ArrowUp, Search, Loader2, CheckCircle2, AlertCircle, Circle, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
+import RouteCompareModal from '../components/routes/RouteCompareModal'
 
 // 知识库路线
 const KNOWN_ROUTES = [
@@ -54,6 +55,8 @@ export default function RoutesPage() {
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [uploadMessage, setUploadMessage] = useState('')
   const [userRoutes, setUserRoutes] = useState<DisplayRoute[]>([])
+  const [compareList, setCompareList] = useState<string[]>([])
+  const [showCompare, setShowCompare] = useState(false)
 
   // 加载用户已上传的路线
   const fetchUserRoutes = useCallback(async () => {
@@ -143,6 +146,20 @@ export default function RoutesPage() {
 
   const allRoutes: DisplayRoute[] = [...userRoutes, ...KNOWN_ROUTES]
 
+  const toggleCompare = (key: string) => {
+    setCompareList(prev => {
+      if (prev.includes(key)) return prev.filter(k => k !== key)
+      if (prev.length >= 4) return prev
+      return [...prev, key]
+    })
+  }
+
+  const clearCompare = () => setCompareList([])
+
+  const compareRoutes = compareList
+    .map(key => allRoutes.find(r => (r.isUserUpload ? `user-${r.id}` : r.name) === key))
+    .filter((r): r is DisplayRoute => Boolean(r))
+
   const filtered = allRoutes.filter(r => {
     if (search && !r.name.includes(search) && !r.region.includes(search)) return false
     if (difficultyFilter && r.difficulty !== difficultyFilter) return false
@@ -150,7 +167,7 @@ export default function RoutesPage() {
   })
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className={`max-w-4xl mx-auto ${compareList.length > 0 ? 'pb-20' : ''}`}>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">路线管理</h2>
@@ -265,9 +282,20 @@ export default function RoutesPage() {
                     </div>
                     <p className="text-xs text-gray-500 mt-0.5">{route.region} · {route.trailhead}</p>
                   </div>
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ml-2 ${DIFFICULTY_COLORS[route.difficulty] || 'bg-gray-100 text-gray-600'}`}>
-                    {route.difficulty}
-                  </span>
+                  <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); toggleCompare(key) }}
+                      title={compareList.includes(key) ? '取消对比' : '加入对比'}
+                      className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+                        compareList.includes(key) ? 'bg-primary text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                      }`}
+                    >
+                      {compareList.includes(key) ? <CheckCircle2 className="w-4 h-4" /> : <Circle className="w-4 h-4" />}
+                    </button>
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium flex-shrink-0 ${DIFFICULTY_COLORS[route.difficulty] || 'bg-gray-100 text-gray-600'}`}>
+                      {route.difficulty}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Stats */}
@@ -335,6 +363,36 @@ export default function RoutesPage() {
           <Map className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p className="text-sm">没有找到匹配的路线</p>
         </div>
+      )}
+
+      {/* 对比操作条 */}
+      {compareList.length > 0 && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-gray-900/95 text-white rounded-full pl-5 pr-2 py-2 shadow-lg backdrop-blur">
+          <span className="text-sm font-medium whitespace-nowrap">已选 {compareList.length}/4</span>
+          <button
+            onClick={() => setShowCompare(true)}
+            disabled={compareList.length < 2}
+            className={`px-4 py-1.5 text-sm rounded-full transition-colors ${
+              compareList.length < 2
+                ? 'bg-white/10 text-white/40 cursor-not-allowed'
+                : 'bg-primary text-white hover:bg-primary-dark'
+            }`}
+          >
+            开始对比
+          </button>
+          <button
+            onClick={clearCompare}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-white/70 hover:bg-white/10"
+            title="清空选择"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* 对比弹窗 */}
+      {showCompare && (
+        <RouteCompareModal routes={compareRoutes} onClose={() => setShowCompare(false)} />
       )}
     </div>
   )

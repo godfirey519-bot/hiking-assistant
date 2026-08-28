@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Calendar, Users, Map, Trash2, Loader2, PlusCircle } from 'lucide-react'
+import { Calendar, Users, Map, Trash2, Loader2, PlusCircle, Search, SearchX } from 'lucide-react'
 import api from '../services/api'
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
@@ -9,10 +9,19 @@ const STATUS_MAP: Record<string, { label: string; cls: string }> = {
   failed: { label: '失败', cls: 'bg-red-100 text-red-700' },
 }
 
+const STATUS_FILTERS = [
+  { value: 'all', label: '全部' },
+  { value: 'completed', label: '已完成' },
+  { value: 'processing', label: '生成中' },
+  { value: 'failed', label: '失败' },
+]
+
 export default function PlanHistory() {
   const navigate = useNavigate()
   const [plans, setPlans] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
 
   const load = () => {
     setLoading(true)
@@ -23,6 +32,18 @@ export default function PlanHistory() {
   }
 
   useEffect(load, [])
+
+  const filtered = useMemo(() => {
+    const kw = search.trim().toLowerCase()
+    return plans.filter(p => {
+      if (statusFilter !== 'all' && p.status !== statusFilter) return false
+      if (!kw) return true
+      const haystack = `${p.title || ''} ${p.description || ''}`.toLowerCase()
+      return haystack.includes(kw)
+    })
+  }, [plans, search, statusFilter])
+
+  const hasFilter = search.trim() !== '' || statusFilter !== 'all'
 
   const handleDelete = async (e: React.MouseEvent, id: number) => {
     e.preventDefault()
@@ -51,6 +72,34 @@ export default function PlanHistory() {
         </button>
       </div>
 
+      {/* 搜索 + 筛选 */}
+      <div className="bg-white rounded-xl border border-gray-200 p-3 mb-4 flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="搜索方案标题或目的地..."
+            className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+          />
+        </div>
+        <div className="flex gap-1.5 flex-wrap">
+          {STATUS_FILTERS.map(f => (
+            <button
+              key={f.value}
+              onClick={() => setStatusFilter(f.value)}
+              className={`px-3 py-1.5 text-xs rounded-full transition-colors ${
+                statusFilter === f.value
+                  ? 'bg-primary text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {loading && (
         <div className="flex justify-center items-center py-20 text-gray-400">
           <Loader2 className="w-6 h-6 animate-spin mr-2" /> 加载中...
@@ -71,8 +120,26 @@ export default function PlanHistory() {
         </div>
       )}
 
+      {!loading && plans.length > 0 && filtered.length === 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
+          <SearchX className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+          <p className="text-gray-500 mb-2">没有匹配的方案</p>
+          <p className="text-sm text-gray-400 mb-4">换个关键词或筛选条件试试</p>
+          <button
+            onClick={() => { setSearch(''); setStatusFilter('all') }}
+            className="px-4 py-2 text-sm border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            清除筛选
+          </button>
+        </div>
+      )}
+
+      {!loading && filtered.length > 0 && (
+        <p className="text-xs text-gray-400 mb-3">共 {filtered.length} 条方案{hasFilter ? '（已筛选）' : ''}</p>
+      )}
+
       <div className="space-y-3">
-        {plans.map(p => {
+        {filtered.map(p => {
           const st = STATUS_MAP[p.status] || { label: p.status, cls: 'bg-gray-100 text-gray-600' }
           return (
             <Link
