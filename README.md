@@ -98,16 +98,69 @@ npm run dev
 │   ├── app/
 │   │   ├── agents/          # 6 个 Agent（RouteAnalyst / EquipmentPlanner / ... ）
 │   │   ├── workflows/       # 工作流编排（plan_workflow.py）
-│   │   ├── services/        # 天气 / 路餐 / 搜索 / LLM / 坐标服务
-│   │   ├── api/             # FastAPI 路由（plans / routes / equipment / trips / chat）
+│   │   ├── services/        # 天气 / 路餐 / 搜索 / LLM / 坐标 / 邮件服务
+│   │   ├── api/             # FastAPI 路由（auth / plans / routes / equipment / trips / chat / stats）
+│   │   ├── models/          # SQLAlchemy 模型（user / plan / gear / trip / route / backpack）
+│   │   ├── schemas/         # Pydantic 请求/响应模型
 │   │   └── main.py
-│   └── data/                # 路线知识库 JSON（136 条，含分日分段）
+│   ├── scripts/             # 数据工具（迁移 / 审计 / 清理 / 采集 / 导入）
+│   ├── tests/               # pytest 测试套件（48+ 用例，覆盖率 71%）
+│   ├── data/                # 路线知识库 JSON（135 条，含分日分段）
+│   ├── requirements.txt     # 生产依赖
+│   └── requirements-dev.txt # 测试依赖（pytest / pytest-asyncio / pytest-cov）
 ├── frontend/                # React SPA（Vite + TS + Tailwind + PWA）
+│   └── scripts/             # E2E 脚本（verify-password-reset.mjs / verify-main-flow.mjs）
+├── docs/
+│   ├── ROADMAP.md           # 开发路线图（P0-P3 任务清单与进度）
+│   └── route-audit-report.md# 路线数据质量抽检报告
 ├── data/                    # SQLite 数据库 + 用户媒体文件（Git 忽略）
-└── docker-compose.yml       # （开发遗留：Postgres/Redis 目前未使用，默认 SQLite）
+├── quality-check.ps1        # 一键质量检查（前端 lint+build + 后端 pytest）
+└── docker-compose.yml       # 可选生产依赖（Postgres/Redis，默认 SQLite 无需）
 ```
 
-> 说明：路线知识库存于 `backend/data/*.json`，运行时加载，无需数据库迁移；`docker-compose.yml` 中的 Postgres/Redis 是早期设计，当前默认使用 SQLite。
+> 说明：路线知识库存于 `backend/data/*.json`，运行时加载，无需数据库迁移；`docker-compose.yml` 中的 Postgres/Redis 是可选生产依赖，当前默认使用 SQLite，不启动 Docker 也可完整运行。
+
+---
+
+## 测试与质量
+
+```bash
+# 后端单元测试（48+ 用例，含覆盖率报告）
+cd backend && python -m pytest --cov=app --cov-report=term -q
+
+# 前端 lint + 类型检查 + 生产构建
+cd frontend && npm run check
+
+# 一键全部（前端 + 后端）
+powershell -ExecutionPolicy Bypass -File quality-check.ps1
+
+# E2E（需前后端已启动 + Chrome）
+node frontend/scripts/verify-password-reset.mjs   # 忘记/重置密码流程
+node frontend/scripts/verify-main-flow.mjs        # 主路径：登录→规划→历史→记录
+```
+
+---
+
+## 部署说明
+
+### 开发模式（默认）
+- `DEBUG=true`（config 默认），密码重置直接返回重置凭证到页面，无需 SMTP。
+- SQLite 数据库，零外部依赖。
+
+### 生产模式
+1. `backend/.env` 设置：
+   ```env
+   DEBUG=false
+   FRONTEND_URL=https://your-domain.com        # 重置链接使用的前端地址
+   SMTP_HOST=smtp.qq.com                        # 必填，否则 forgot-password 会明确报错
+   SMTP_PORT=465
+   SMTP_USER=your-account@qq.com
+   SMTP_PASSWORD=your-smtp-auth-code
+   SMTP_USE_TLS=false                           # true=STARTTLS(587), false=SSL(465)
+   SECRET_KEY=替换为随机密钥
+   ```
+2. （可选）启动 Postgres/Redis：`docker compose up -d`，并把 `DATABASE_URL` 指向 Postgres。
+3. 启动：`cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8001`，前端 `npm run build` 后由 Nginx 托管 `frontend/dist` 并反代 `/api` 与 `/media` 到 8001。
 
 ---
 
