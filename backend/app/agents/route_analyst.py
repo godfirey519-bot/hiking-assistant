@@ -1788,18 +1788,49 @@ class RouteAnalystAgent(BaseAgent):
     async def _analyze_known_route(self, user_input: str, context: dict | None = None) -> AgentResult:
         """基于知识库匹配路线"""
         matched = None
+        # 0. 规范化 query：去掉"我想去/去"前缀与"徒步/穿越/计划"等后缀
+        #    （"罗布泊穿越" → "罗布泊"，"想去喀拉峻" → "喀拉峻"）
+        q = user_input.strip()
+        for w in ("我想去", "计划去", "准备去", "想去", "去"):
+            if q.startswith(w) and len(q) > len(w) + 1:
+                q = q[len(w):]
+                break
+        for w in ("大环线", "线路", "路线", "环线", "穿越", "徒步", "转山", "古道", "攻略", "计划", "推荐", "怎么样", "怎么走"):
+            if q.endswith(w) and len(q) > len(w):
+                q = q[: -len(w)]
+                break
+
         # 1. 精确匹配：KB 名称完整出现在 query 中
         for name, info in KNOWN_ROUTES.items():
             if name in user_input:
                 matched = dict(info)
                 matched["name"] = name
                 break
-        # 2. 前缀匹配：query 开头词是 KB 名称的子串（如"格聂"→"格聂C线"）
+        # 1b. 规范化后的 query 精确匹配
+        if not matched and q and q != user_input:
+            for name, info in KNOWN_ROUTES.items():
+                if name in q:
+                    matched = dict(info)
+                    matched["name"] = name
+                    break
+        # 1c. 名称去活动后缀匹配：如 "罗布泊" ∈ "罗布泊穿越"
         if not matched:
             for name, info in KNOWN_ROUTES.items():
-                # 提取 query 开头的 2-6 字词
-                for n in range(2, min(7, len(user_input) + 1)):
-                    prefix = user_input[:n]
+                base = name
+                for w in ("大环线", "穿越", "徒步", "转山", "古道"):
+                    if base.endswith(w):
+                        base = base[: -len(w)]
+                        break
+                if base and len(base) >= 2 and base in user_input:
+                    matched = dict(info)
+                    matched["name"] = name
+                    break
+        # 2. 前缀匹配：query 开头词是 KB 名称的子串（如"格聂"→"格聂C线"）
+        if not matched:
+            target = q or user_input
+            for name, info in KNOWN_ROUTES.items():
+                for n in range(2, min(7, len(target) + 1)):
+                    prefix = target[:n]
                     if prefix in name:
                         matched = dict(info)
                         matched["name"] = name

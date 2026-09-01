@@ -11,7 +11,7 @@
 |---|------|----------|------|
 | P0-1 | 启动前后端，跑通 `verify-password-reset.mjs` E2E 脚本（忘记密码→重置→新密码登录→改密） | E2E 脚本全部断言通过 | 30 分钟 |
 | P0-2 | 提交代码：backend `auth.py`/`schemas/user.py` + frontend `ForgotPassword`/`ResetPassword`/`Login`/`Settings`/`App.tsx` + E2E 脚本 + CLAUDE.md 更新 | 一个干净的 commit，消息符合规范 | 15 分钟 |
-| P0-3 | push 到 origin（当前 main 领先 origin 2 个提交） | `git status` 干净，远程同步 | 10 分钟 |
+| P0-3 | ✅ **push 到 origin**（完成 2026-09-01）：FlClash 代理就绪后一次推送成功，`0d94fab..d07c084` 共 18 个提交全部同步 | `git status` 干净，main 与 origin/main 同步 | 10 分钟 ✅ |
 
 **P0 完成后：密码重置/修改密码功能正式入库，工作区清零。**
 

@@ -34,6 +34,27 @@ async def test_route_kb_no_match():
     assert "message" in result.output
 
 
+async def test_route_kb_query_normalization():
+    """规范化匹配：去前缀/后缀，让口语化查询命中知识库"""
+    agent = RouteAnalystAgent()
+    cases = {
+        "想去罗布泊穿越": "罗布泊徒步",
+        "想去喀拉峻徒步": "喀拉峻徒步",
+        "虎跳峡两天怎么走": "虎跳峡",
+        "雨崩攻略": "雨崩",
+    }
+    for query, expect in cases.items():
+        result = await agent._analyze_known_route(query)
+        assert result.success, f"{query} 应命中"
+        assert result.output.get("name") == expect, f"{query} -> {result.output.get('name')}, 期望 {expect}"
+
+
+async def test_route_kb_unknown_still_unmatched():
+    agent = RouteAnalystAgent()
+    result = await agent._analyze_known_route("去一个不存在的地方徒步")
+    assert "message" in result.output
+
+
 async def test_route_think_uses_kb_without_llm():
     """think() 走知识库短路，不触发 LLM，秒回"""
     agent = RouteAnalystAgent()
