@@ -10,6 +10,7 @@ import PlanNew from './pages/PlanNew'
 import PlanDetail from './pages/PlanDetail'
 import PlanHistory from './pages/PlanHistory'
 import Equipment from './pages/Equipment'
+import Backpacks from './pages/Backpacks'
 import RoutesPage from './pages/RoutesPage'
 import RouteDetail from './pages/RouteDetail'
 import TripRecords from './pages/TripRecords'
@@ -31,6 +32,7 @@ function App() {
         <Route path="plans/:id" element={<PlanDetail />} />
         <Route path="plans" element={<PlanHistory />} />
         <Route path="equipment" element={<Equipment />} />
+        <Route path="backpacks" element={<Backpacks />} />
         <Route path="routes" element={<RoutesPage />} />
         <Route path="routes/:id" element={<RouteDetail />} />
         <Route path="trips" element={<TripRecords />} />

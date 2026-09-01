@@ -2,7 +2,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
 import {
   LayoutDashboard, Map, Backpack, Footprints,
-  Settings, LogOut, Menu, PlusCircle, History
+  Settings, LogOut, Menu, PlusCircle, History, Briefcase
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -11,6 +11,7 @@ const navItems = [
   { path: '/plans/new', icon: PlusCircle, label: '新建规划', highlight: true },
   { path: '/plans', icon: History, label: '历史规划' },
   { path: '/equipment', icon: Backpack, label: '装备管理' },
+  { path: '/backpacks', icon: Briefcase, label: '背包方案' },
   { path: '/routes', icon: Map, label: '路线管理' },
   { path: '/trips', icon: Footprints, label: '徒步记录' },
   { path: '/settings', icon: Settings, label: '设置' },
