@@ -147,53 +147,11 @@ class SynthesizerAgent(BaseAgent):
                     output["schedule"] = fixed_schedule
 
                 elif not has_detail:
-                    # 无分段 + LLM 没生成详细日程 → 用改进的降级方法重新生成
-                    from app.agents.base import AgentResult
+                    # 无分段 + LLM 没生成详细日程 → 用规则降级重新生成
                     fallback_output = await self._execute_with_tools(user_input, context)
                     if fallback_output and fallback_output.get("schedule"):
                         output["schedule"] = fallback_output["schedule"]
-                    day_num = seg.get("day", len(fixed_schedule) + 1)
-                    # 尝试找到 LLM 生成的对应天
-                    llm_day = None
-                    for s in (schedule or []):
-                        if s.get("day") == day_num:
-                            llm_day = s
-                            break
 
-                    seg_from = seg.get("from", "")
-                    seg_to = seg.get("to", "")
-                    seg_dist = seg.get("distance_km", 0)
-                    seg_gain = seg.get("gain_m", 0)
-
-                    entry = {
-                        "day": day_num,
-                        "from": seg_from or (llm_day.get("from", "") if llm_day else ""),
-                        "to": seg_to or (llm_day.get("to", "") if llm_day else ""),
-                        "distance_km": seg_dist or (llm_day.get("distance_km", 0) if llm_day else 0),
-                        "gain_m": seg_gain or (llm_day.get("gain_m", 0) if llm_day else 0),
-                        "terrain": seg.get("terrain", "") or (llm_day.get("terrain", "") if llm_day else ""),
-                        "water": seg.get("water", "") or (llm_day.get("water", "") if llm_day else ""),
-                        "highlights": seg.get("highlights", "") or (llm_day.get("highlights", "") if llm_day else ""),
-                        "risks": seg.get("risks", "") or (llm_day.get("risks", "") if llm_day else ""),
-                        "pace": seg.get("pace", "") or (llm_day.get("pace", "") if llm_day else ""),
-                        "description": "第{}天: {} → {}，约{}km，爬升{}m".format(day_num, seg_from, seg_to, seg_dist, seg_gain),
-                        "morning": (llm_day.get("morning", "") if llm_day else "") or "从{}出发".format(seg_from),
-                        "afternoon": (llm_day.get("afternoon", "") if llm_day else "") or "到达{}".format(seg_to),
-                        "evening": (llm_day.get("evening", "") if llm_day else "") or "扎营休息",
-                        "key_points": (llm_day.get("key_points", []) if llm_day else []) or [seg.get("highlights", "")],
-                    }
-                    # 保留 LLM 生成的个性化 notes
-                    if llm_day and llm_day.get("notes"):
-                        entry["notes"] = llm_day["notes"]
-                    fixed_schedule.append(entry)
-
-                # 如果 segments 天数比 schedule 多出来的也加上
-                if len(fixed_schedule) < len(schedule):
-                    for s in schedule:
-                        if s.get("day", 0) > len(segments):
-                            fixed_schedule.append(s)
-
-                output["schedule"] = fixed_schedule
                 result.output = output
 
         return result

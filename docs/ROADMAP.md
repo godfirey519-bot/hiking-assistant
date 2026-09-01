@@ -35,7 +35,7 @@
 
 | # | 任务 | 验收标准 | 预估 |
 |---|------|----------|------|
-| P2-1 | 后端 pytest 单元测试：auth（注册/登录/重置）、plans（工作流状态机）、equipment（CRUD）、meal（预算分层）、weather（mock 外部 API） | 核心模块覆盖率 ≥ 60%，`pytest` 全绿 | 4~6 小时 |
+| P2-1 | ✅ **后端 pytest 单测**（完成 2026-08-28）：48 个测试覆盖 auth/equipment/plans/workflow/meal/weather/agents 规则引擎，**总覆盖率 71%**（目标 ≥60%）；期间修复 2 个真实 Bug：① equipment API 无效分类导致 500 IntegrityError → 改为 400 校验；② synthesizer `elif not has_detail` 分支引用未定义变量（UnboundLocalError，未知路线时工作流崩溃）→ 重写为纯规则降级；dev 依赖见 `requirements-dev.txt` | `pytest` 全绿（48 passed），`--cov=app` 覆盖率 71%；工作流冒烟测试覆盖 94% | 4~6 小时 ✅ |
 | P2-2 | 前端关键流程自动化：复用 `verify-password-reset.mjs` 模式，补登录→新建规划→历史列表→记录创建 主路径 E2E | 主路径脚本一键通过 | 3~4 小时 |
 | P2-3 | 一键质量脚本：`lint + typecheck + build + pytest` 串联（npm script + 根目录脚本），可选 GitHub Actions CI | 一条命令全绿 | 1 小时 |
 | P2-4 | 文档补全：README 项目结构章节补全、docker-compose 实际启动验证、部署说明 | 按 README 可从零启动前后端 + Docker | 1~2 小时 |

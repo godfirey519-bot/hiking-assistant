@@ -59,14 +59,19 @@ async def create_item(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
+    # 校验分类存在（避免 FK 约束错误 500）
+    cat_result = await db.execute(select(GearCategory).where(GearCategory.id == data.category_id))
+    category = cat_result.scalar_one_or_none()
+    if not category:
+        raise HTTPException(400, "装备分类不存在")
+
     item = GearItem(user_id=user.id, **data.model_dump())
     db.add(item)
     await db.flush()
     await db.refresh(item)
 
     # eager load category（异步会话下懒加载会触发 MissingGreenlet）
-    cat_result = await db.execute(select(GearCategory).where(GearCategory.id == item.category_id))
-    item.category = cat_result.scalar_one_or_none()
+    item.category = category
 
     return item
 
@@ -85,6 +90,12 @@ async def update_item(
     if not item:
         raise HTTPException(404, "装备不存在")
 
+    # 校验新分类存在
+    cat_result = await db.execute(select(GearCategory).where(GearCategory.id == data.category_id))
+    category = cat_result.scalar_one_or_none()
+    if not category:
+        raise HTTPException(400, "装备分类不存在")
+
     update_data = data.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         setattr(item, key, value)
@@ -92,8 +103,7 @@ async def update_item(
     await db.refresh(item)
 
     # eager load category
-    cat_result = await db.execute(select(GearCategory).where(GearCategory.id == item.category_id))
-    item.category = cat_result.scalar_one_or_none()
+    item.category = category
 
     return item
 

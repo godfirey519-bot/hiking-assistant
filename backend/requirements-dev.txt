@@ -1,0 +1,5 @@
+# 开发/测试依赖
+# 用法: pip install -r requirements.txt -r requirements-dev.txt
+pytest==9.1.1
+pytest-asyncio==1.4.0
+pytest-cov==6.2.1
