@@ -30,6 +30,8 @@ backend/data/*.db
 # 用户上传的媒体文件（照片/视频）
 data/media/
 backend/data/media/
+# 用户上传的 GPX 文件
+data/gpx/
 # 构建产物
 frontend/dist/
 
