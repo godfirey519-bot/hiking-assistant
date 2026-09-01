@@ -48,16 +48,34 @@ if (!wsUrl) { console.error('FAIL: no CDP'); chrome.kill(); process.exit(1) }
 const ws = new WebSocket(wsUrl)
 let msgId = 0
 const pending = new Map()
+// CDP 调用带超时：防止某一步卡死导致整个脚本挂起
 const send = (method, params = {}) => new Promise((resolve) => {
   const id = ++msgId
-  pending.set(id, resolve)
-  ws.send(JSON.stringify({ id, method, params }))
+  const timer = setTimeout(() => {
+    pending.delete(id)
+    resolve({ error: `CDP timeout: ${method}` })
+  }, 15000)
+  pending.set(id, (result) => {
+    clearTimeout(timer)
+    resolve(result)
+  })
+  try {
+    ws.send(JSON.stringify({ id, method, params }))
+  } catch {
+    clearTimeout(timer)
+    pending.delete(id)
+    resolve({ error: `CDP send failed: ${method}` })
+  }
 })
 const consoleErrors = []
 ws.onmessage = (e) => {
   const m = JSON.parse(e.data)
   if (m.id && pending.has(m.id)) { pending.get(m.id)(m.result); pending.delete(m.id) }
   if (m.method === 'Runtime.exceptionThrown') consoleErrors.push(m.params.exceptionDetails?.exception?.description || 'exception')
+}
+// WebSocket 断开时把挂起的调用全部 resolve，避免永久等待
+ws.onclose = () => {
+  for (const [id, fn] of pending) { fn({ error: 'CDP closed' }); pending.delete(id) }
 }
 await new Promise(r => ws.onopen = r)
 await send('Page.enable')
@@ -89,11 +107,17 @@ const setFile = async (selector, filePath) => {
   return true
 }
 const audit = async (label) => {
-  const m = JSON.parse(await evalJs(`JSON.stringify({ overflow: document.documentElement.scrollWidth - window.innerWidth, path: location.pathname })`))
+  let m = { overflow: 99, path: '?' }
+  try {
+    const raw = await evalJs(`JSON.stringify({ overflow: document.documentElement.scrollWidth - window.innerWidth, path: location.pathname })`)
+    if (raw) m = JSON.parse(raw)
+  } catch { /* 页面异常时降级 */ }
   const ok = m.overflow <= 1
   console.log(`${label.padEnd(22)} ${ok ? '✅' : '❌ 溢出'} path=${m.path}`)
-  const s = await send('Page.captureScreenshot', { format: 'png' })
-  writeFileSync(path.join(SHOT_DIR, `uitest-${label}.png`), Buffer.from(s.data, 'base64'))
+  try {
+    const s = await send('Page.captureScreenshot', { format: 'png' })
+    if (s.data) writeFileSync(path.join(SHOT_DIR, `uitest-${label}.png`), Buffer.from(s.data, 'base64'))
+  } catch { /* 截图失败不影响结果 */ }
   return ok
 }
 
