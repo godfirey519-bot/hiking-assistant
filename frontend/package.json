@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "node scripts/bump-sw.mjs && tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check": "npm run lint && tsc -b --noEmit && npm run build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
