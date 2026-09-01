@@ -1451,6 +1451,167 @@ KNOWN_ROUTES = {
         "notes": "部分路段需攀爬，注意潮汐时间，建议结伴而行，做好防晒。",
     },  # 广东
 
+    # ===== 补充路线（2026-09-01 二次采集，此前批量采集失败） =====
+    "终南山徒步": {
+        "distance_km": 30, "elevation_gain_m": 1800, "max_elevation_m": 2604,
+        "difficulty": "中等", "duration_days": 2,
+        "terrain": "秦岭石海、高山草甸、原始森林",
+        "water_sources": "甘湫池、沿途溪流",
+        "best_season": "4-6月、9-11月",
+        "trailhead": "西安市长安区石砭峪",
+        "notes": "秦岭南北分界线，可经翠华山出山；石海路段注意防滑。",
+    },  # 补充-陕西
+
+    "翠华山徒步": {
+        "distance_km": 10, "elevation_gain_m": 1000, "max_elevation_m": 2604,
+        "difficulty": "中等", "duration_days": 1,
+        "terrain": "山崩石海、栈道、林间步道",
+        "water_sources": "景区商店、天池周边补给",
+        "best_season": "3-5月、9-11月",
+        "trailhead": "西安市太乙宫翠华山景区大门",
+        "notes": "山崩地质奇观，天池可游船；步道成熟，适合一日游。",
+    },  # 补充-陕西
+
+    "祁连山徒步": {
+        "distance_km": 60, "elevation_gain_m": 2000, "max_elevation_m": 4100,
+        "difficulty": "困难", "duration_days": 4,
+        "terrain": "高山牧场、碎石坡、冰川、垭口",
+        "water_sources": "冰沟河、沿途溪流（需过滤）",
+        "best_season": "6-9月",
+        "trailhead": "甘肃张掖肃南裕固族自治县",
+        "notes": "高海拔地区注意高反与天气突变；牧民营地可借宿；建议结伴并携带卫星通讯。",
+    },  # 补充-甘肃
+
+    "马蹄寺徒步": {
+        "distance_km": 15, "elevation_gain_m": 600, "max_elevation_m": 2800,
+        "difficulty": "中等", "duration_days": 1,
+        "terrain": "石窟栈道、草甸、山地土路",
+        "water_sources": "景区及镇上有补给",
+        "best_season": "5-10月",
+        "trailhead": "张掖市肃南县马蹄寺景区",
+        "notes": "三十三天石窟值得一看；祁连山脚下牧场风光，适合休闲徒步。",
+    },  # 补充-甘肃
+
+    "茶卡盐湖徒步": {
+        "distance_km": 10, "elevation_gain_m": 50, "max_elevation_m": 3100,
+        "difficulty": "轻松", "duration_days": 1,
+        "terrain": "盐壳湖面、盐堤、栈道",
+        "water_sources": "景区内外补给充足，盐湖水不可饮用",
+        "best_season": "6-9月（天空之镜最佳）",
+        "trailhead": "青海海西州乌兰县茶卡镇",
+        "notes": "高海拔注意防晒；盐壳锋利建议穿鞋套；清晨/傍晚倒影最美。",
+    },  # 补充-青海
+
+    "雪乡穿越": {
+        "distance_km": 15, "elevation_gain_m": 800, "max_elevation_m": 1400,
+        "difficulty": "中等", "duration_days": 1,
+        "terrain": "积雪林道、雪原、翻越羊草山",
+        "water_sources": "雪谷/雪乡有补给，途中需带热水",
+        "best_season": "12月至次年2月（雪季）",
+        "trailhead": "牡丹江市大海林雪乡（双峰林场）",
+        "notes": "冬季线路注意保暖防滑，雪套冰爪必备；羊草山风大，午后天气多变。",
+    },  # 补充-黑龙江
+
+    "武隆天坑徒步": {
+        "distance_km": 8, "elevation_gain_m": 400, "max_elevation_m": 1400,
+        "difficulty": "轻松", "duration_days": 1,
+        "terrain": "景区步道、喀斯特天坑栈道",
+        "water_sources": "景区补给点充足",
+        "best_season": "全年（夏季避暑）",
+        "trailhead": "重庆市武隆区天生三桥景区",
+        "notes": "天生三桥+龙水峡地缝经典联游；《满城尽带黄金甲》取景地；台阶较多注意膝盖。",
+    },  # 补充-重庆
+
+    "黄果树徒步": {
+        "distance_km": 12, "elevation_gain_m": 300, "max_elevation_m": 1200,
+        "difficulty": "轻松", "duration_days": 1,
+        "terrain": "景区步道、河谷栈道",
+        "water_sources": "景区补给点充足",
+        "best_season": "6-10月（丰水期瀑布壮观）",
+        "trailhead": "贵州省安顺市黄果树景区",
+        "notes": "陡坡塘、黄果树大瀑布、天星桥三段联游；雨季注意栈道湿滑。",
+    },  # 补充-贵州
+
+    "龙虎山徒步": {
+        "distance_km": 20, "elevation_gain_m": 800, "max_elevation_m": 800,
+        "difficulty": "中等", "duration_days": 2,
+        "terrain": "丹霞峰林、泸溪河岸、竹海步道",
+        "water_sources": "上清镇、景区补给充足",
+        "best_season": "3-5月、9-11月",
+        "trailhead": "江西省鹰潭市龙虎山景区",
+        "notes": "道教发源地，天师府+象鼻山+仙水岩经典线路；可乘竹筏游泸溪河。",
+    },  # 补充-江西
+
+    "香山徒步": {
+        "distance_km": 8, "elevation_gain_m": 500, "max_elevation_m": 575,
+        "difficulty": "轻松", "duration_days": 1,
+        "terrain": "公园步道、石阶路",
+        "water_sources": "公园内售卖点充足",
+        "best_season": "春秋季（10-11月红叶最佳）",
+        "trailhead": "北京市海淀区香山公园东门",
+        "notes": "香炉峰（鬼见愁）登顶俯瞰北京城；节假日人多建议早出发；可连走香八拉拉练线。",
+    },  # 补充-北京
+
+    "孟克德古道": {
+        "distance_km": 70, "elevation_gain_m": 1800, "max_elevation_m": 3495,
+        "difficulty": "困难", "duration_days": 4,
+        "terrain": "天山河谷、高山草甸、碎石达坂",
+        "water_sources": "孟克德河谷溪流（需过滤）",
+        "best_season": "6-9月",
+        "trailhead": "新疆乌苏市（独库公路沿线）",
+        "notes": "翻越孟克德达坂，穿越天山腹地至唐布拉草原；无信号区需卫星通讯；马帮驮运可选。",
+    },  # 补充-新疆
+
+    "喀拉峻徒步": {
+        "distance_km": 50, "elevation_gain_m": 1200, "max_elevation_m": 2800,
+        "difficulty": "中等", "duration_days": 3,
+        "terrain": "高山五花草甸、阔克苏峡谷、草原牧场",
+        "water_sources": "牧民毡房、沿途溪流",
+        "best_season": "6-8月（花海季）",
+        "trailhead": "新疆特克斯县喀拉峻景区",
+        "notes": "世界自然遗产，鲜花台-猎鹰台-阔克苏峡谷经典线；可徒步至琼库什台；牧民毡房可住宿。",
+    },  # 补充-新疆
+
+    "托乎拉苏徒步": {
+        "distance_km": 40, "elevation_gain_m": 800, "max_elevation_m": 2600,
+        "difficulty": "中等", "duration_days": 2,
+        "terrain": "高山草原、松林、丘陵牧场",
+        "water_sources": "沿途溪流、牧场水源",
+        "best_season": "6-9月",
+        "trailhead": "新疆伊宁县托乎拉苏草原",
+        "notes": "草原穿越至赛里木湖方向；六月野花盛开；坡度平缓适合入门长线。",
+    },  # 补充-新疆
+
+    "罗布泊徒步": {
+        "distance_km": 120, "elevation_gain_m": 200, "max_elevation_m": 1200,
+        "difficulty": "专业级", "duration_days": 6,
+        "terrain": "戈壁盐壳、雅丹群、干涸湖盆",
+        "water_sources": "全程无水源，需补给车队",
+        "best_season": "10月至次年4月（避开高温）",
+        "trailhead": "新疆若羌县（需后勤补给车）",
+        "notes": "极端干旱无人区，必须专业向导+补给车队；夏季地表 70°C+ 严禁进入；卫星电话必备。",
+    },  # 补充-新疆
+
+    "阿尔金山徒步": {
+        "distance_km": 80, "elevation_gain_m": 1500, "max_elevation_m": 4800,
+        "difficulty": "专业级", "duration_days": 5,
+        "terrain": "高原荒漠、盐湖、雪山草甸",
+        "water_sources": "阿牙克库木湖等盐湖不可饮用，需自备",
+        "best_season": "6-8月（高反最轻时段）",
+        "trailhead": "青海茫崖市/新疆若羌县",
+        "notes": "高原无人区，海拔 4000m+，必须专业团队与车辆保障；严格高反预防；保护区需提前报批。",
+    },  # 补充-新疆/青海
+
+    "昆仑山徒步": {
+        "distance_km": 60, "elevation_gain_m": 2000, "max_elevation_m": 4800,
+        "difficulty": "专业级", "duration_days": 4,
+        "terrain": "高原戈壁、雪山、冰川、碎石坡",
+        "water_sources": "冰川融水（需过滤），补给稀少",
+        "best_season": "6-8月",
+        "trailhead": "青海格尔木市（昆仑山口方向）",
+        "notes": "昆仑山口海拔 4768m 需先适应；玉虚峰/黑独山方向；高反风险极高，需专业向导。",
+    },  # 补充-青海/新疆
+
 }
 
 # 初始化：加载外部日程分段 + 合并到知识库
