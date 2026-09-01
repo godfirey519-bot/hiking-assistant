@@ -37,7 +37,7 @@
 |---|------|----------|------|
 | P2-1 | ✅ **后端 pytest 单测**（完成 2026-08-28）：48 个测试覆盖 auth/equipment/plans/workflow/meal/weather/agents 规则引擎，**总覆盖率 71%**（目标 ≥60%）；期间修复 2 个真实 Bug：① equipment API 无效分类导致 500 IntegrityError → 改为 400 校验；② synthesizer `elif not has_detail` 分支引用未定义变量（UnboundLocalError，未知路线时工作流崩溃）→ 重写为纯规则降级；dev 依赖见 `requirements-dev.txt` | `pytest` 全绿（48 passed），`--cov=app` 覆盖率 71%；工作流冒烟测试覆盖 94% | 4~6 小时 ✅ |
 | P2-2 | ✅ **前端主路径 E2E**（完成 2026-08-28）：新增 `verify-main-flow.mjs`（Chrome headless 390px）：登录→新建规划（**真实 LLM 工作流** 17s 完成）→历史列表→创建徒步记录，全链路通过；期间修复 3 个真实缺陷：① trips API media 懒加载导致 MissingGreenlet → **一次列表请求即可拖垮整个后端**（list/get 补 selectinload(media)）；② TripDetail useEffect 缺依赖（lint）；③ E2E 路由笔误 /plans/history（实际路由是 /plans）；新增 `test_trips.py` 防回归 | 主路径 E2E 一键通过（约 2-3 分钟）；截图存 frontend/scripts/mainflow-*.png | 3~4 小时 ✅ |
-| P2-3 | ✅ **一键质量脚本**（完成 2026-08-28）：根目录 `quality-check.ps1` 串联前端 lint+tsc+build 与后端 pytest（含覆盖率）；frontend 新增 `npm run check` | `npm run check` 全绿（lint 0 警告、tsc、build 1.6s）；`pytest` 48+ 全绿 | 1 小时 ✅ |
+| P2-3 | ✅ **一键质量脚本 + GitHub Actions CI**（完成 2026-09-01）：根目录 `quality-check.ps1` 串联前端 lint+tsc+build 与后端 pytest（含覆盖率）；frontend 新增 `npm run check`；CI 工作流（push/PR 自动跑后端 pytest + 前端 check）**已上线且全绿** —— CI 首跑即发现真实跨平台 Bug（passlib 1.7.4 × bcrypt≥4.1 不兼容导致认证崩溃），已修复（固定 bcrypt==4.0.1）并验证通过 | `npm run check` 全绿；`pytest` 61 全绿；GitHub Actions 双 job success | 1~2 小时 ✅ |
 | P2-4 | ✅ **文档与部署补全**（完成 2026-08-28）：README 项目结构补全（tests/scripts/ROADMAP/质量工具）、新增"测试与质量"与"部署说明"章节（开发/生产模式，含 SMTP 配置）；docker-compose.yml 经 YAML 语法校验有效，定位澄清为可选生产依赖 | 按 README 可从零启动前后端；**注**：本机未装 Docker，compose 实机启动验证待有 Docker 环境后补做 | 1~2 小时 ✅ |
 
 **P2 完成后：项目具备可回归的测试基线，后续改动能放心。**
