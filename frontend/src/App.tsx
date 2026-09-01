@@ -4,6 +4,8 @@ import MainLayout from './components/layout/MainLayout'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import PlanNew from './pages/PlanNew'
 import PlanDetail from './pages/PlanDetail'
 import PlanHistory from './pages/PlanHistory'
@@ -21,6 +23,8 @@ function App() {
     <Routes>
       <Route path="/login" element={token ? <Navigate to="/" /> : <Login />} />
       <Route path="/register" element={token ? <Navigate to="/" /> : <Register />} />
+      <Route path="/forgot-password" element={token ? <Navigate to="/" /> : <ForgotPassword />} />
+      <Route path="/reset-password" element={token ? <Navigate to="/" /> : <ResetPassword />} />
       <Route path="/" element={token ? <MainLayout /> : <Navigate to="/login" />}>
         <Route index element={<Dashboard />} />
         <Route path="plans/new" element={<PlanNew />} />

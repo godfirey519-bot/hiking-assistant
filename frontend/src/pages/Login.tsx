@@ -75,9 +75,12 @@ export default function Login() {
             {loading ? '登录中...' : '登录'}
           </button>
 
-          <p className="text-center text-sm text-gray-500">
-            还没有账号？<Link to="/register" className="text-primary hover:underline">立即注册</Link>
-          </p>
+          <div className="flex items-center justify-between text-sm">
+            <p className="text-gray-500">
+              还没有账号？<Link to="/register" className="text-primary hover:underline">立即注册</Link>
+            </p>
+            <Link to="/forgot-password" className="text-primary hover:underline">忘记密码？</Link>
+          </div>
         </form>
       </div>
     </div>

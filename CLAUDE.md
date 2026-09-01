@@ -108,6 +108,7 @@ npm run dev
 - [x] **Service Worker 缓存名自动 bump**（`npm run build` 自动注入时间戳版本）
 - [x] **历史规划搜索/筛选**（PlanHistory 关键词搜索 + 状态筛选 + 空态）
 - [x] **路线对比**（多选勾选 + 对比表格弹窗，数值最低/最高高亮，移动端横向滑动）
+- [x] **忘记密码 / 修改密码**（登录页邮箱重置流程 + 设置页改密，dev 模式直接返回重置凭证，E2E 脚本 `verify-password-reset.mjs`）
 
 ## 下一步
 
