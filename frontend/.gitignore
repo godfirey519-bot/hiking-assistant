@@ -16,6 +16,7 @@ dist-ssr
 scripts/pwreset-*.png
 scripts/mainflow-*.png
 scripts/uitest-*.png
+scripts/mobile-*.png
 
 # Editor directories and files
 .vscode/*
