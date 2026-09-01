@@ -33,6 +33,17 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 60 * 24 * 7  # 7 天
 
+    # 前端地址（用于生成密码重置链接）
+    frontend_url: str = "http://localhost:5173"
+
+    # SMTP 邮件（生产模式密码重置必填；为空时 forgot-password 会明确报错）
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from: str = ""  # 发件人地址，为空则用 smtp_user
+    smtp_use_tls: bool = True
+
     # LLM API
     # 支持 Anthropic Claude 和 DeepSeek（OpenAI 兼容）
     # 默认使用 DeepSeek

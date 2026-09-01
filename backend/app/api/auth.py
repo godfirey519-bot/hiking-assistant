@@ -20,6 +20,14 @@ from app.schemas.user import (
 )
 from app.config import get_settings
 from app.api.deps import get_current_user
+from app.services.email_service import (
+    EmailNotConfiguredError,
+    EmailSendError,
+    send_reset_email,
+)
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["认证"])
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -103,7 +111,7 @@ async def login(data: UserLogin, db: AsyncSession = Depends(get_db)):
 
 @router.post("/forgot-password", response_model=ForgotPasswordResponse)
 async def forgot_password(data: ForgotPasswordRequest, db: AsyncSession = Depends(get_db)):
-    """按邮箱发起密码重置。开发模式（debug=True）直接返回 token，生产走邮件。"""
+    """按邮箱发起密码重置。开发模式（debug=True）直接返回 token，生产走 SMTP 邮件。"""
     result = await db.execute(select(User).where(User.email == data.email))
     user = result.scalar_one_or_none()
 
@@ -118,8 +126,19 @@ async def forgot_password(data: ForgotPasswordRequest, db: AsyncSession = Depend
             message="开发模式：重置凭证已生成，点击下方链接重置密码",
             reset_token=token,
         )
-    # 生产模式：TODO 接入 SMTP 发送邮件
-    return ForgotPasswordResponse(message="重置邮件已发送，请查收邮箱")
+
+    # 生产模式：走真实 SMTP 邮件
+    try:
+        send_reset_email(user.email, token)
+    except EmailNotConfiguredError as exc:
+        # 明确报错，绝不静默假装"已发送"
+        logger.error(f"forgot-password: {exc}")
+        raise HTTPException(500, "邮件服务未配置，请联系管理员完成密码重置")
+    except EmailSendError as exc:
+        logger.error(f"forgot-password: {exc}")
+        raise HTTPException(503, "重置邮件发送失败，请稍后重试或联系管理员")
+
+    return ForgotPasswordResponse(message="重置邮件已发送，请查收邮箱（30 分钟内有效）")
 
 
 @router.post("/reset-password", response_model=MessageResponse)
