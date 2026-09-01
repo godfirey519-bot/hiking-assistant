@@ -24,6 +24,7 @@ class Plan(Base):
     sections = relationship("PlanSection", back_populates="plan", cascade="all, delete-orphan")
     agent_logs = relationship("PlanAgentLog", back_populates="plan", cascade="all, delete-orphan")
     trips = relationship("TripRecord", back_populates="plan")
+    shares = relationship("PlanShare", back_populates="plan", cascade="all, delete-orphan")
 
 
 class PlanSection(Base):
@@ -62,3 +63,16 @@ class PlanAgentLog(Base):
     completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     plan = relationship("Plan", back_populates="agent_logs")
+
+
+class PlanShare(Base):
+    """方案分享链接（免登录只读访问）"""
+
+    __tablename__ = "plan_shares"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    plan_id: Mapped[int] = mapped_column(ForeignKey("plans.id"), nullable=False)
+    token: Mapped[str] = mapped_column(String(32), unique=True, nullable=False, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    plan = relationship("Plan", back_populates="shares")

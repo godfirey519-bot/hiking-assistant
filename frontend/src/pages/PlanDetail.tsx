@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { ArrowLeft, Trash2, ChevronDown, ChevronRight, Calendar, Users, Loader2 } from 'lucide-react'
+import { ArrowLeft, Trash2, ChevronDown, ChevronRight, Calendar, Users, Loader2, Share2, Check } from 'lucide-react'
 import api from '../services/api'
 import PlanResult from '../components/agent/PlanResult'
 import { mapPlanToResult } from '../utils/planMapper'
@@ -18,6 +18,9 @@ export default function PlanDetail() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showLogs, setShowLogs] = useState(false)
+  const [shareUrl, setShareUrl] = useState('')
+  const [shareLoading, setShareLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const load = () => {
     setLoading(true)
@@ -35,6 +38,26 @@ export default function PlanDetail() {
       await api.delete(`/plans/${id}`)
       navigate('/plans')
     } catch { /* ignore */ }
+  }
+
+  const handleShare = async () => {
+    setShareLoading(true)
+    try {
+      const res = await api.post(`/share/plans/${id}`)
+      setShareUrl(`${window.location.origin}${res.data.url}`)
+    } catch (err: any) {
+      alert(err.response?.data?.detail || '生成分享链接失败')
+    } finally {
+      setShareLoading(false)
+    }
+  }
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch { /* clipboard unavailable */ }
   }
 
   if (loading) {
@@ -68,13 +91,45 @@ export default function PlanDetail() {
         <Link to="/plans" className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline">
           <ArrowLeft className="w-4 h-4" /> 历史规划
         </Link>
-        <button
-          onClick={handleDelete}
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-500 px-2 py-2 -my-1 transition-colors"
-        >
-          <Trash2 className="w-4 h-4" /> 删除
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            onClick={handleShare}
+            disabled={shareLoading || data.status !== 'completed'}
+            className="flex items-center gap-1.5 text-sm text-primary hover:bg-primary/5 px-2.5 py-2 rounded-lg transition-colors disabled:opacity-50"
+            title={data.status !== 'completed' ? '方案完成后才能分享' : '生成分享链接'}
+          >
+            <Share2 className="w-4 h-4" /> {shareLoading ? '生成中...' : '分享'}
+          </button>
+          <button
+            onClick={handleDelete}
+            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-500 px-2 py-2 transition-colors"
+          >
+            <Trash2 className="w-4 h-4" /> 删除
+          </button>
+        </div>
       </div>
+
+      {/* 分享链接 */}
+      {shareUrl && (
+        <div className="bg-gradient-to-r from-primary/5 to-purple-500/5 border border-primary/20 rounded-xl p-4 mb-4">
+          <p className="text-sm font-medium text-gray-700 mb-2">🔗 分享链接（他人无需登录即可查看）</p>
+          <div className="flex gap-2">
+            <input
+              readOnly
+              value={shareUrl}
+              onFocus={e => e.target.select()}
+              className="flex-1 min-w-0 px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none"
+            />
+            <button
+              onClick={copyLink}
+              className="flex items-center gap-1.5 px-3 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary-dark transition-colors flex-shrink-0"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+              {copied ? '已复制' : '复制'}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 标题 + 元信息 */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 mb-4">

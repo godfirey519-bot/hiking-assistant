@@ -9,6 +9,7 @@ import ResetPassword from './pages/ResetPassword'
 import PlanNew from './pages/PlanNew'
 import PlanDetail from './pages/PlanDetail'
 import PlanHistory from './pages/PlanHistory'
+import SharePage from './pages/SharePage'
 import Equipment from './pages/Equipment'
 import Backpacks from './pages/Backpacks'
 import RoutesPage from './pages/RoutesPage'
@@ -26,6 +27,8 @@ function App() {
       <Route path="/register" element={token ? <Navigate to="/" /> : <Register />} />
       <Route path="/forgot-password" element={token ? <Navigate to="/" /> : <ForgotPassword />} />
       <Route path="/reset-password" element={token ? <Navigate to="/" /> : <ResetPassword />} />
+      {/* 公开分享页（免登录只读） */}
+      <Route path="/share/plans/:token" element={<SharePage />} />
       <Route path="/" element={token ? <MainLayout /> : <Navigate to="/login" />}>
         <Route index element={<Dashboard />} />
         <Route path="plans/new" element={<PlanNew />} />

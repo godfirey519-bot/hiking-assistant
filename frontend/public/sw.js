@@ -1,5 +1,5 @@
 // 徒步助手 Service Worker — 离线缓存 + 安装支持
-const CACHE_NAME = 'hiking-assistant-vmsmxsvsc';
+const CACHE_NAME = 'hiking-assistant-vmti1ewpk';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
