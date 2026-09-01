@@ -65,9 +65,10 @@
 3. 每轮结束向用户汇报进度与下一步。
 4. 需要用户决策的点（如测试数据清理策略）提前询问，不擅自删除用户数据。
 
-## 已知事实备注（接手时核实）
+## 已知事实备注（接手时核实 / 2026-09-01 更新）
 
-- 知识库：`route_analyst.py` 内置 136 条 + `route_segments.json` 外部分段 136 条 ✅ 已合并
-- `collected_routes.json`（72 条）与 `xinjiang_routes.json`（23 条）**已全部导入**知识库（0 缺失）✅
-- DB 现状：8 用户 / 61 方案（57 完成）/ 274 分段 / 649 Agent 日志 / 13 装备分类 / 2 装备条目 / 0 背包
-- Git：3 个 commit，main 领先 origin 2 个，密码重置功能未提交（P0 处理）
+- 知识库：`route_analyst.py` 内置 151 条 + `route_segments.json` 外部分段 151 条 ✅ 已合并（审计 150/151，仅太白山判定正确）
+- `collected_routes.json`（72 条）与 `xinjiang_routes.json`（23 条）**已全部导入**知识库 ✅
+- DB 现状：11+ 用户（含 demo 演示账号）/ 68+ 方案 / 13 装备分类 / 70+ 装备条目（demo）/ 2 套背包方案（demo）/ 徒步记录多条
+- Git：与 GitHub 完全同步，CI 自动门禁运行中（push 自动跑 pytest + 前端 check）
+- 测试基线：pytest 61 用例（覆盖率 ~70%）+ E2E×3（密码重置/主路径/用户流程 11 环节）
