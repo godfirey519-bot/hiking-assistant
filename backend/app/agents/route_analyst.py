@@ -44,26 +44,6 @@ KNOWN_ROUTES = {
         ],
     },
     # ===== 云南 =====
-    "雨崩": {
-        "distance_km": 18, "elevation_gain_m": 1500, "max_elevation_m": 3800,
-        "difficulty": "较难", "duration_days": 3,
-        "terrain": "高原山路、原始森林、碎石坡",
-        "water_sources": "沿途有溪流，需过滤",
-        "best_season": "5-6月（杜鹃花季）、9-10月（秋季）",
-        "trailhead": "德钦县飞来寺→西当村",
-        "notes": "海拔高注意高反；雨季（7-8月）路滑",
-        "segments": [
-            {"day": 1, "from": "飞来寺(海拔3400m)", "to": "西当村→上雨崩(海拔3200m)", "distance_km": 6, "gain_m": 400,
-             "terrain": "公路→森林土路", "water": "西当村补给", "highlights": "梅里雪山日照金山（出发前看）",
-             "risks": "海拔适应第一天，慢走防高反", "pace": "约3-4小时，可乘车到西当村省力"},
-            {"day": 2, "from": "上雨崩(海拔3200m)", "to": "冰湖→返回上雨崩(海拔3900m)", "distance_km": 12, "gain_m": 700,
-             "terrain": "原始森林→高山牧场→碎石坡", "water": "笑农牧场可补水", "highlights": "冰湖、雪山倒影、原始森林",
-             "risks": "高海拔爬升，注意高反；碎石坡路滑", "pace": "约7-9小时往返，早6点出发"},
-            {"day": 3, "from": "上雨崩(海拔3200m)", "to": "神瀑→西当村出(海拔2600m)", "distance_km": 8, "gain_m": 300,
-             "terrain": "森林→瀑布区", "water": "沿途溪流（需过滤）", "highlights": "神瀑、经幡、藏区信仰圣地",
-             "risks": "瀑布区湿滑；下降注意膝盖", "pace": "约5-6小时，下午3点前出山"},
-        ],
-    },
     "虎跳峡": {
         "distance_km": 25, "elevation_gain_m": 1200, "max_elevation_m": 2670,
         "difficulty": "中等", "duration_days": 2,
@@ -120,8 +100,8 @@ KNOWN_ROUTES = {
 
     # ===== 四川 =====
     "四姑娘山二峰": {
-        "distance_km": 32, "elevation_gain_m": 2200, "max_elevation_m": 5276,
-        "difficulty": "困难", "duration_days": 3,
+        "distance_km": 32, "elevation_gain_m": 2100, "max_elevation_m": 5276,
+        "difficulty": "困难", "duration_days": 2,
         "terrain": "高山草甸、碎石坡、雪线以上",
         "water_sources": "大本营有水源",
         "best_season": "6-10月",
@@ -710,13 +690,13 @@ KNOWN_ROUTES = {
     },  # 新疆
 
     "独库公路徒步": {
-        "distance_km": 112, "elevation_gain_m": 6500, "max_elevation_m": 3400,
-        "difficulty": "极难", "duration_days": 25,
+        "distance_km": 70, "elevation_gain_m": 6100, "max_elevation_m": 3400,
+        "difficulty": "极难", "duration_days": 15,
         "terrain": "柏油公路、高山草甸、峡谷、达坂、雪山路段",
         "water_sources": "沿线河流（奎屯河、喀什河、库车河）及夏季融雪溪流，部分路段需自备水",
         "best_season": "6月至9月（全线通车期，7-8月最佳）",
         "trailhead": "北起独山子（G217起点），南至库车",
-        "notes": "独库公路为公路，非传统徒步道，全程沿G217国道行走，需注意车辆安全；全程561公里，海拔起伏大，需翻越哈希勒根达坂（3400米）等三个达坂；补给点稀少，需提前规划物资；部分路段有牧民毡房可借宿；建议结伴并携带卫星通讯设备；实际徒步者多分段进行，或结合周边草原路线。",
+        "notes": "独库公路为公路，非传统徒步道，全程沿G217国道行走，需注意车辆安全；全程561公里，海拔起伏大，需翻越哈希勒根达坂（3400米）等三个达坂；补给点稀少，需提前规划物资；部分路段有牧民毡房可借宿；建议结伴并携带卫星通讯设备；实际徒步者多分段进行，或结合周边草原路线。分段数据覆盖北段（独山子→铁力买提达坂），南段至库车待补充。",
     },  # 新疆
 
     "巴音布鲁克徒步": {
