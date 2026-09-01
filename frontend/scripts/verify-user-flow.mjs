@@ -8,7 +8,6 @@ import path from 'path'
 
 const PORT = 9230
 const BASE = 'http://localhost:5173'
-const API = 'http://localhost:8001'
 const SHOT_DIR = 'D:/徒步助手/frontend/scripts'
 const UNIQ = Date.now().toString(36).slice(-6)
 const USER = { username: `uitest_${UNIQ}`, email: `uitest_${UNIQ}@test.com`, password: 'uitest123' }
@@ -128,13 +127,21 @@ const check = (cond, label, extra = '') => {
 }
 
 // ===== 1. 注册（UI 全流程）→ 自动登录 =====
-await send('Page.navigate', { url: `${BASE}/register` }); await sleep(2500)
+await send('Page.navigate', { url: `${BASE}/register` }); await sleep(3000)
+const regPageOk = await evalJs(`location.pathname === '/register' && !!document.querySelector('form')`)
+check(regPageOk, '注册页正常渲染')
 await setInput('input[type="text"]', USER.username)
 await setInput('input[type="email"]', USER.email)
 await setInput('input[type="password"]', USER.password)
-await clickText('注册'); await sleep(3500)
+const regClicked = await clickText('注册')
+check(regClicked, '点击注册按钮')
+await sleep(3500)
 const regPath = await evalJs('location.pathname')
 check(regPath === '/', '注册成功并自动登录', regPath)
+if (regPath !== '/') {
+  const err = await evalJs(`document.body.innerText.slice(0, 200)`)
+  console.log('   注册页状态:', err.replace(/\n+/g, ' ').slice(0, 150))
+}
 await audit('1-register')
 
 // ===== 2. 设置页修改密码 =====

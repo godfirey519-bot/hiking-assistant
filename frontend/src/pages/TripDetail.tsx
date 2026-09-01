@@ -29,7 +29,11 @@ export default function TripDetail() {
     const fd = new FormData()
     fd.append('file', file)
     try {
-      await api.post(`/trips/${id}/upload-media`, fd)
+      // 必须显式指定 multipart：axios 实例默认头是 application/json，
+      // 否则 FastAPI 无法解析 file 字段（422 Field required）
+      await api.post(`/trips/${id}/upload-media`, fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       await loadTrip()
     } catch (err: any) {
       alert(err?.response?.data?.detail || '上传失败')
