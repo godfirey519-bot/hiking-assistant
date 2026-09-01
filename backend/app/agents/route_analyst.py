@@ -1421,16 +1421,6 @@ KNOWN_ROUTES = {
         "notes": "崇明岛地势平坦，适合初级徒步者；注意防晒和防风，部分路段无遮阴；湿地区域注意蚊虫。",
     },  # 上海
 
-    "白云山": {
-        "distance_km": 6, "elevation_gain_m": 300, "max_elevation_m": 382,
-        "difficulty": "较易", "duration_days": 1,
-        "terrain": "台阶路、水泥路、土路",
-        "water_sources": "沿途有售卖点，需自备水",
-        "best_season": "秋冬季节",
-        "trailhead": "白云山南门",
-        "notes": "门票5元，需提前预约；节假日人多，建议早出发；注意防晒补水。",
-    },  # 广东
-
     "大夫山森林公园": {
         "distance_km": 10, "elevation_gain_m": 200, "max_elevation_m": 226,
         "difficulty": "轻松", "duration_days": 1,
