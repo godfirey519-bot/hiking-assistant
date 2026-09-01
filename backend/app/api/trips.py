@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 import os
 import aiofiles
 from datetime import datetime
@@ -22,6 +24,7 @@ async def list_trips(
 ):
     result = await db.execute(
         select(TripRecord)
+        .options(selectinload(TripRecord.media))
         .where(TripRecord.user_id == user.id)
         .order_by(TripRecord.created_at.desc())
     )
@@ -77,7 +80,9 @@ async def get_trip(
     db: AsyncSession = Depends(get_db),
 ):
     result = await db.execute(
-        select(TripRecord).where(TripRecord.id == trip_id, TripRecord.user_id == user.id)
+        select(TripRecord)
+        .options(selectinload(TripRecord.media))
+        .where(TripRecord.id == trip_id, TripRecord.user_id == user.id)
     )
     trip = result.scalar_one_or_none()
     if not trip:

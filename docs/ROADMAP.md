@@ -36,8 +36,8 @@
 | # | 任务 | 验收标准 | 预估 |
 |---|------|----------|------|
 | P2-1 | ✅ **后端 pytest 单测**（完成 2026-08-28）：48 个测试覆盖 auth/equipment/plans/workflow/meal/weather/agents 规则引擎，**总覆盖率 71%**（目标 ≥60%）；期间修复 2 个真实 Bug：① equipment API 无效分类导致 500 IntegrityError → 改为 400 校验；② synthesizer `elif not has_detail` 分支引用未定义变量（UnboundLocalError，未知路线时工作流崩溃）→ 重写为纯规则降级；dev 依赖见 `requirements-dev.txt` | `pytest` 全绿（48 passed），`--cov=app` 覆盖率 71%；工作流冒烟测试覆盖 94% | 4~6 小时 ✅ |
-| P2-2 | 前端关键流程自动化：复用 `verify-password-reset.mjs` 模式，补登录→新建规划→历史列表→记录创建 主路径 E2E | 主路径脚本一键通过 | 3~4 小时 |
-| P2-3 | 一键质量脚本：`lint + typecheck + build + pytest` 串联（npm script + 根目录脚本），可选 GitHub Actions CI | 一条命令全绿 | 1 小时 |
+| P2-2 | ✅ **前端主路径 E2E**（完成 2026-08-28）：新增 `verify-main-flow.mjs`（Chrome headless 390px）：登录→新建规划（**真实 LLM 工作流** 17s 完成）→历史列表→创建徒步记录，全链路通过；期间修复 3 个真实缺陷：① trips API media 懒加载导致 MissingGreenlet → **一次列表请求即可拖垮整个后端**（list/get 补 selectinload(media)）；② TripDetail useEffect 缺依赖（lint）；③ E2E 路由笔误 /plans/history（实际路由是 /plans）；新增 `test_trips.py` 防回归 | 主路径 E2E 一键通过（约 2-3 分钟）；截图存 frontend/scripts/mainflow-*.png | 3~4 小时 ✅ |
+| P2-3 | ✅ **一键质量脚本**（完成 2026-08-28）：根目录 `quality-check.ps1` 串联前端 lint+tsc+build 与后端 pytest（含覆盖率）；frontend 新增 `npm run check` | `npm run check` 全绿（lint 0 警告、tsc、build 1.6s）；`pytest` 48+ 全绿 | 1 小时 ✅ |
 | P2-4 | 文档补全：README 项目结构章节补全、docker-compose 实际启动验证、部署说明 | 按 README 可从零启动前后端 + Docker | 1~2 小时 |
 
 **P2 完成后：项目具备可回归的测试基线，后续改动能放心。**

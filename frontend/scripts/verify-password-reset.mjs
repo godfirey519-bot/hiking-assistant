@@ -2,7 +2,7 @@
 // 用法: node scripts/verify-password-reset.mjs
 // 前置: 后端(8001) + 前端(5173) 已启动，且有测试账号 test_pwreset（脚本会自动创建）
 import { spawn } from 'child_process'
-import { mkdtempSync, writeFileSync, existsSync } from 'fs'
+import { mkdtempSync, writeFileSync } from 'fs'
 import { tmpdir } from 'os'
 import path from 'path'
 

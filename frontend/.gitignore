@@ -14,6 +14,7 @@ dist-ssr
 
 # E2E 测试截图产物
 scripts/pwreset-*.png
+scripts/mainflow-*.png
 
 # Editor directories and files
 .vscode/*

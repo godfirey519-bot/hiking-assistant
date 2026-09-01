@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ArrowLeft, Calendar, Navigation, ArrowUp, Star, Loader2, Route as RouteIcon, ImagePlus } from 'lucide-react'
 import api from '../services/api'
@@ -11,16 +11,16 @@ export default function TripDetail() {
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const loadTrip = () => {
+  const loadTrip = useCallback(() => {
     api.get(`/trips/${id}`)
       .then(res => setTrip(res.data))
       .catch(() => setError('记录不存在或加载失败'))
       .finally(() => setLoading(false))
-  }
+  }, [id])
 
   useEffect(() => {
     loadTrip()
-  }, [id])
+  }, [loadTrip])
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
